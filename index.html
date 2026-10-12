@@ -1,80 +1,350 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <title>Programier-Kurs</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Webwerkstatt – HTML, CSS & JavaScript lernen</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg: #10131a;
+            --panel: #191e28;
+            --panel-light: #222938;
+            --text: #f1f4fa;
+            --muted: #aab4c5;
+            --accent: #8ce0c2;
+            --accent-dark: #24483e;
+            --border: #30394a;
+            --danger: #ffb4a9;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font: 16px/1.6 system-ui, sans-serif;
+        }
+
+        button, textarea { font: inherit; }
+
+        button {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 14px;
+            color: var(--text);
+            background: var(--panel-light);
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+        button:hover { border-color: var(--accent); transform: translateY(-1px); }
+        button:focus-visible, textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+        .app { min-height: 100vh; display: grid; grid-template-columns: 270px 1fr; }
+
+        aside {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 25px 18px;
+            background: #141923;
+            border-right: 1px solid var(--border);
+        }
+
+        .brand { font-size: 1.3rem; font-weight: 800; }
+        .brand span { color: var(--accent); }
+        .side-note, .muted { color: var(--muted); font-size: .92rem; }
+
+        .progress-box {
+            margin: 22px 0;
+            padding: 14px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+        }
+
+        progress { width: 100%; height: 9px; accent-color: var(--accent); }
+
+        nav { display: grid; gap: 8px; }
+        nav button { width: 100%; text-align: left; background: transparent; }
+        nav button.active { background: var(--accent-dark); border-color: var(--accent); }
+
+        main { width: min(1050px, 100%); margin: auto; padding: 38px clamp(18px, 5vw, 65px); }
+        .topline { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+        .eyebrow { color: var(--accent); text-transform: uppercase; letter-spacing: .12em; font-size: .78rem; }
+        h1 { font-size: clamp(2rem, 5vw, 3.3rem); line-height: 1.1; margin: 12px 0; }
+        h2 { margin-top: 0; }
+        .intro { max-width: 720px; color: var(--muted); font-size: 1.08rem; }
+
+        .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 26px 0; }
+        .card, .lesson {
+            padding: 22px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+
+        .card h2 { font-size: 1.08rem; }
+        .lesson { margin: 18px 0; }
+        .lesson p { color: var(--muted); }
+
+        code, pre { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+        pre {
+            overflow-x: auto;
+            padding: 16px;
+            background: #0c0f15;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: #d3f5e8;
+            font-size: .9rem;
+        }
+
+        .editor {
+            width: 100%;
+            min-height: 180px;
+            padding: 14px;
+            color: var(--text);
+            background: #0c0f15;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            resize: vertical;
+        }
+
+        .toolbar { display: flex; flex-wrap: wrap; gap: 9px; margin: 12px 0; }
+        .primary { color: #10211c; background: var(--accent); border-color: var(--accent); font-weight: 700; }
+        .primary:hover { background: #b2f3dc; }
+        .output {
+            min-height: 100px;
+            padding: 16px;
+            background: white;
+            color: #20242b;
+            border-radius: 10px;
+        }
+
+        .quiz-option { display: block; width: 100%; margin: 8px 0; text-align: left; }
+        .feedback { min-height: 28px; color: var(--accent); }
+        .danger { color: var(--danger); }
+        .small { font-size: .85rem; }
+        .hidden { display: none; }
+
+        @media (max-width: 760px) {
+            .app { grid-template-columns: 1fr; }
+            aside { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--border); }
+            nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            main { padding-top: 25px; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
-<header>
-    <h1 class="willkomen">Willkommen zum Programmier-Kurs</h1>
-</header>
+<div class="app">
+    <aside>
+        <div class="brand">Web<span>werkstatt</span></div>
+        <p class="side-note">Lerne Webentwicklung durch Erklären, Ausprobieren und Bauen.</p>
 
-<main>
-    <section>
-        <h2 class="title">Über den Kurs</h2>
-        <p>In diesem Kurs lernen Sie die Grundlagen der Programmierung. Wir werden verschiedene Programmiersprachen und
-            Konzepte behandeln.</p>
-        <p>Der Kurs ist für Anfänger geeignet und erfordert keine Vorkenntnisse.</p>
-    </section>
+        <div class="progress-box">
+            <strong>Dein Lernfortschritt</strong>
+            <p class="small muted"><span id="progressText">0</span> von 4 Modulen abgeschlossen</p>
+            <progress id="progressBar" value="0" max="4"></progress>
+        </div>
 
-    <section>
-        <h2>Kursinhalte</h2>
-        <ul>
-            <li>Einführung in die Programmierung</li>
-            <li>Variablen und Datentypen</li>
-            <li>Kontrollstrukturen</li>
-            <li>Funktionen und Methoden</li>
-            <li>Objektorientierte Programmierung</li>
-            <li>HTML</li>
-        </ul>
-    </section>
-</main>
+        <nav aria-label="Lernmodule">
+            <button class="active" data-page="start">🏠 Übersicht</button>
+            <button data-page="html">🧱 HTML verstehen</button>
+            <button data-page="css">🎨 CSS gestalten</button>
+            <button data-page="js">⚡ JavaScript nutzen</button>
+            <button data-page="practice">🛠️ Übungswerkstatt</button>
+            <button data-page="quiz">🧠 Wissenscheck</button>
+        </nav>
+        <p class="side-note small">Dein Fortschritt wird auf diesem Gerät gespeichert.</p>
+    </aside>
 
-<h1>Variablen und Datentypen</h1>
-<p>In diesem Abschnitt lernen Sie, wie man Variablen deklariert und welche Datentypen es gibt.</p>
-<h2>Variablen</h2>
-<p>Eine Variable ist ein Speicherort, der einen Wert speichern kann. In den meisten Programmiersprachen müssen Variablen
-    deklariert werden, bevor sie verwendet werden können.</p>
-<h2>Datentypen</h2>
-<p>Es gibt verschiedene Datentypen, die in der Programmierung verwendet werden. Die gängigsten sind:</p>
-<ul>
-    <li>Integer (Ganzzahlen)</li>
-    <li>Float (Gleitkommazahlen)</li>
-    <li>String (Zeichenketten)</li>
-    <li>Boolean (Wahrheitswerte)</li>
-</ul>
-<h1>HTML</h1>
-<p>HTML (Hypertext Markup Language) ist die Standard-Auszeichnungssprache für Dokumente, die im Web angezeigt werden.
-    HTML beschreibt die Struktur einer Webseite und wird verwendet, um Inhalte wie Text, Bilder und Links zu
-    formatieren.</p>
-<h2>Grundlegende HTML-Struktur</h2>
-<p>Eine grundlegende HTML-Seite besteht aus den folgenden Elementen:</p>
-<ul>
-    <li><code>&lt;!DOCTYPE html&gt;</code>: Deklariert den Dokumenttyp und die HTML-Version.</li>
-    <li><code>&lt;html&gt;</code>: Das Wurzelelement, das den gesamten HTML-Code umschließt.</li>
-    <li><code>&lt;head&gt;</code>: Enthält Metadaten, wie den Titel der Seite und Verweise auf CSS-Dateien.</li>
-    <li><code>&lt;body&gt;</code>: Enthält den sichtbaren Inhalt der Webseite.</li>
-</ul>
-<h2>Beispiel für eine einfache HTML-Seite</h2>
-<div class="code">
-<pre>
-&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-&lt;head&gt;
-    &lt;meta charset="UTF-8"&gt;
-    &lt;title&gt;Meine erste HTML-Seite&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;h1&gt;Willkommen auf meiner Webseite&lt;/h1&gt;
-    &lt;p&gt;Dies ist ein Absatz mit Text.&lt;/p&gt;
-    &lt;a href="https://www.example.com"&gt;Dies ist ein Link&lt;/a&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</pre>
+    <main id="content" tabindex="-1"></main>
 </div>
-<footer>
-    <p>&copy; 2024 Programmier-Kurs. Alle Rechte vorbehalten.</p>
-</footer>
+
+<script>
+    const pages = {
+        start: `
+        <div class="topline"><span class="eyebrow">Dein interaktiver Lernpfad</span><span class="muted">HTML · CSS · JavaScript</span></div>
+        <h1>Baue das Web.<br>Lerne beim Machen.</h1>
+        <p class="intro">Eine gute Website entsteht aus drei Bausteinen: HTML beschreibt den Inhalt, CSS gestaltet das Aussehen und JavaScript fügt Verhalten hinzu. Lerne jedes Werkzeug einzeln und verbinde sie anschließend in einem eigenen Mini-Projekt.</p>
+        <div class="grid">
+          <article class="card"><h2>🧱 HTML: Inhalt und Bedeutung</h2><p class="muted">Erstelle Überschriften, Absätze, Links, Bilder und Formulare. Semantische Elemente helfen Menschen und Browsern, deine Seite zu verstehen.</p><button data-go="html">HTML-Modul öffnen →</button></article>
+          <article class="card"><h2>🎨 CSS: Gestaltung und Layout</h2><p class="muted">Lerne Farben, Abstände, Typografie und responsive Layouts. Mit CSS wird aus einer strukturierten Seite ein eigenes Design.</p><button data-go="css">CSS-Modul öffnen →</button></article>
+          <article class="card"><h2>⚡ JavaScript: Interaktion</h2><p class="muted">Reagiere auf Klicks, verändere Inhalte und verwende Variablen, Funktionen und Bedingungen, um Seiten lebendig zu machen.</p><button data-go="js">JavaScript-Modul öffnen →</button></article>
+          <article class="card"><h2>🛠️ Üben statt nur lesen</h2><p class="muted">Ändere den Beispielcode, führe ihn aus und beobachte, was passiert. Kleine Experimente machen Zusammenhänge sichtbar.</p><button data-go="practice">Zur Werkstatt →</button></article>
+        </div>
+        <section class="lesson"><h2>So lernst du am besten</h2><ol><li>Lies eine kurze Erklärung.</li><li>Tippe oder verändere den Beispielcode selbst.</li><li>Führe ihn aus und prüfe das Ergebnis.</li><li>Schließe ein Modul erst ab, wenn du erklären kannst, warum es funktioniert.</li></ol></section>`,
+
+        html: `
+        <span class="eyebrow">Modul 1 · Struktur</span><h1>HTML verstehen</h1>
+        <p class="intro">HTML (HyperText Markup Language) beschreibt, welche Inhalte auf einer Webseite stehen und welche Bedeutung sie haben. Elemente werden meist mit einem öffnenden und einem schließenden Tag geschrieben.</p>
+        <section class="lesson"><h2>Ein Element lesen</h2><pre>&lt;p&gt;Das ist ein Absatz.&lt;/p&gt;</pre><p><code>&lt;p&gt;</code> öffnet den Absatz, der Text ist sein Inhalt und <code>&lt;/p&gt;</code> schließt ihn. Tags sollten korrekt ineinander verschachtelt werden.</p></section>
+        <section class="lesson"><h2>Eine sinnvolle Grundstruktur</h2><pre>&lt;!doctype html&gt;
+&lt;html lang="de"&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;Meine Seite&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Willkommen&lt;/h1&gt;
+    &lt;p&gt;Hier steht mein Inhalt.&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre><p>Der <code>head</code> enthält Informationen über die Seite. Sichtbare Inhalte stehen im <code>body</code>. Verwende Überschriften in einer nachvollziehbaren Reihenfolge und Links mit aussagekräftigem Text.</p></section>
+        <section class="lesson"><h2>Deine Aufgabe</h2><p>Erstelle eine kleine Vorstellung mit einer Hauptüberschrift, zwei Absätzen und einem Link. Nutze dafür den Editor in der Übungswerkstatt.</p><button class="primary" data-complete="html">HTML-Modul abschließen</button></section>`,
+
+        css: `
+        <span class="eyebrow">Modul 2 · Gestaltung</span><h1>CSS gestalten</h1>
+        <p class="intro">CSS (Cascading Style Sheets) legt fest, wie HTML aussieht. Eine Regel besteht aus einem Selektor und Deklarationen: Der Selektor wählt Elemente aus, Eigenschaften und Werte bestimmen die Gestaltung.</p>
+        <section class="lesson"><h2>Selektoren und Deklarationen</h2><pre>h1 {
+  color: seagreen;
+  font-size: 2rem;
+}</pre><p>Diese Regel wählt alle <code>h1</code>-Elemente aus. <code>color</code> ist eine Eigenschaft, <code>seagreen</code> ihr Wert. Jede Deklaration endet mit einem Semikolon.</p></section>
+        <section class="lesson"><h2>Das Box-Modell</h2><p>Jedes Element besteht vereinfacht aus Inhalt, Innenabstand (<code>padding</code>), Rahmen (<code>border</code>) und Außenabstand (<code>margin</code>). Mit <code>box-sizing: border-box</code> lässt sich die Größenberechnung leichter nachvollziehen.</p><pre>* { box-sizing: border-box; }
+
+.card {
+  padding: 1rem;
+  margin: 1rem 0;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+}</pre></section>
+        <section class="lesson"><h2>Responsive denken</h2><p>Ein flexibles Layout passt sich verschiedenen Bildschirmbreiten an. Media Queries erlauben gezielte Änderungen, zum Beispiel für schmale Bildschirme.</p><pre>@media (max-width: 600px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}</pre><button class="primary" data-complete="css">CSS-Modul abschließen</button></section>`,
+
+        js: `
+        <span class="eyebrow">Modul 3 · Verhalten</span><h1>JavaScript nutzen</h1>
+        <p class="intro">JavaScript kann auf Ereignisse reagieren und HTML-Inhalte verändern. Beginne mit Variablen, Funktionen und Ereignisbehandlern – und teste jede Änderung direkt.</p>
+        <section class="lesson"><h2>Variablen und Funktionen</h2><pre>const name = "Ada";
+
+function begruessung(person) {
+  return "Hallo, " + person + "!";
+}
+
+console.log(begruessung(name));</pre><p><code>const</code> erstellt eine Variable, deren Zuweisung nicht neu gesetzt wird. Eine Funktion bündelt wiederverwendbaren Code und kann einen Wert zurückgeben.</p></section>
+        <section class="lesson"><h2>Auf Klicks reagieren</h2><pre>const knopf = document.querySelector("#knopf");
+
+knopf.addEventListener("click", () => {
+  document.querySelector("#meldung").textContent = "Geschafft!";
+});</pre><p><code>querySelector</code> findet ein Element. <code>addEventListener</code> führt eine Funktion aus, wenn das angegebene Ereignis eintritt.</p></section>
+        <section class="lesson"><h2>Denke in kleinen Schritten</h2><p>Prüfe zuerst, ob das Element gefunden wird. Danach füge die Reaktion hinzu. Bei Fehlern helfen die Entwicklerwerkzeuge des Browsers und die Konsole.</p><button class="primary" data-complete="js">JavaScript-Modul abschließen</button></section>`,
+
+        practice: `
+        <span class="eyebrow">Übungswerkstatt · Sicher ausprobieren</span><h1>Dein Code-Labor</h1>
+        <p class="intro">Schreibe HTML mit Inline-CSS und Inline-JavaScript. Klicke auf „Ausführen“, um dein Ergebnis zu sehen. Probiere aus, ändere etwas und führe den Code erneut aus.</p>
+        <section class="lesson"><h2>Editor</h2>
+          <textarea class="editor" id="editor" aria-label="HTML-Code bearbeiten" spellcheck="false"><!doctype html>
+<html lang="de">
+<body style="font-family: system-ui; padding: 20px; background: #f0f8f5;">
+  <h1 style="color: seagreen;">Meine erste Seite</h1>
+  <p>Ich lerne HTML, CSS und JavaScript.</p>
+  <button id="knopf">Klick mich</button>
+  <p id="meldung"></p>
+  <script>
+    document.querySelector("#knopf").addEventListener("click", () => {
+      document.querySelector("#meldung").textContent = "Das JavaScript funktioniert!";
+    });
+  <\/script>
+</body>
+</html></textarea>
+          <div class="toolbar"><button class="primary" id="run">▶ Ausführen</button><button id="reset">Beispiel wiederherstellen</button></div>
+          <p class="small muted">Der Code wird in einem isolierten Vorschaufenster ausgeführt. Verlasse dich bei fremdem Code trotzdem nicht auf dessen Sicherheit.</p>
+          <iframe id="preview" class="output" title="Vorschau des eigenen Codes" sandbox="allow-scripts"></iframe>
+        </section>
+        <section class="lesson"><h2>Mini-Projekt: Deine persönliche Karte</h2><ol><li>Ändere die Überschrift in deinen Namen oder ein Thema.</li><li>Füge ein Bild mit einem sinnvollen <code>alt</code>-Text hinzu.</li><li>Gib der Karte mit Inline-CSS einen Hintergrund und Innenabstand.</li><li>Ergänze einen Knopf, der per JavaScript eine Nachricht anzeigt.</li></ol></section>`,
+
+        quiz: `
+        <span class="eyebrow">Wissenscheck · 3 Fragen</span><h1>Was hast du gelernt?</h1>
+        <p class="intro">Wähle jeweils die beste Antwort. Du kannst es beliebig oft versuchen.</p>
+        <section class="lesson" id="quizBox"></section>
+        <button class="primary" data-complete="quiz">Wissenscheck abschließen</button>`
+    };
+
+    const labels = { start: "Übersicht", html: "HTML", css: "CSS", js: "JavaScript", practice: "Übungswerkstatt", quiz: "Wissenscheck" };
+    const questions = [
+        { q: "Wofür ist HTML hauptsächlich zuständig?", a: ["Für die Struktur und Bedeutung von Inhalten", "Für die Datenbank eines Servers", "Für Farben und Abstände"], correct: 0 },
+        { q: "Was beschreibt eine CSS-Regel?", a: ["Nur den Inhalt einer Webseite", "Welche Elemente wie gestaltet werden", "Wie ein Server gestartet wird"], correct: 1 },
+        { q: "Womit reagiert JavaScript auf einen Klick?", a: ["Mit einem Ereignisbehandler", "Mit einem HTML-Kommentar", "Mit einer CSS-Farbe"], correct: 0 }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    const content = document.getElementById("content");
+    const completed = new Set(JSON.parse(localStorage.getItem("webwerkstatt-completed") || "[]"));
+
+    function updateProgress() {
+        document.getElementById("progressText").textContent = completed.size;
+        document.getElementById("progressBar").value = completed.size;
+    }
+
+    function renderQuiz() {
+        const box = document.getElementById("quizBox");
+        if (!box) return;
+        if (currentQuestion >= questions.length) {
+            box.innerHTML = `<h2>Ergebnis: ${score} von ${questions.length}</h2><p>${score === questions.length ? "Stark! Du hast alle Fragen richtig beantwortet." : "Gut gemacht. Wiederhole die Module und versuche es erneut."}</p><button id="retry">Quiz wiederholen</button>`;
+            document.getElementById("retry").onclick = () => { currentQuestion = 0; score = 0; renderQuiz(); };
+            return;
+        }
+        const item = questions[currentQuestion];
+        box.innerHTML = `<p class="eyebrow">Frage ${currentQuestion + 1} von ${questions.length}</p><h2>${item.q}</h2>${item.a.map((answer, i) => `<button class="quiz-option" data-answer="${i}">${answer}</button>`).join("")}<p class="feedback" id="feedback" aria-live="polite"></p>`;
+        box.querySelectorAll("[data-answer]").forEach(button => {
+            button.onclick = () => {
+                const correct = Number(button.dataset.answer) === item.correct;
+                if (correct) score++;
+                box.querySelectorAll(".quiz-option").forEach(option => option.disabled = true);
+                document.getElementById("feedback").textContent = correct ? "Richtig! Gute Arbeit." : "Noch nicht ganz – schau dir die Erklärung noch einmal an.";
+                const next = document.createElement("button");
+                next.textContent = currentQuestion === questions.length - 1 ? "Ergebnis anzeigen" : "Nächste Frage →";
+                next.className = "primary";
+                next.onclick = () => { currentQuestion++; renderQuiz(); };
+                box.appendChild(next);
+            };
+        });
+    }
+
+    function show(page) {
+        content.innerHTML = pages[page] || pages.start;
+        content.dataset.page = page;
+        document.querySelectorAll("nav button").forEach(button => button.classList.toggle("active", button.dataset.page === page));
+        if (page === "quiz") renderQuiz();
+        if (page === "practice") setupEditor();
+        content.focus({ preventScroll: true });
+    }
+
+    function setupEditor() {
+        const example = document.getElementById("editor").value;
+        document.getElementById("run").onclick = () => {
+            document.getElementById("preview").srcdoc = document.getElementById("editor").value;
+        };
+        document.getElementById("reset").onclick = () => {
+            document.getElementById("editor").value = example;
+            document.getElementById("preview").srcdoc = example;
+        };
+        document.getElementById("preview").srcdoc = example;
+    }
+
+    document.addEventListener("click", event => {
+        const navButton = event.target.closest("nav button");
+        const goButton = event.target.closest("[data-go]");
+        const completeButton = event.target.closest("[data-complete]");
+        if (navButton) show(navButton.dataset.page);
+        if (goButton) show(goButton.dataset.go);
+        if (completeButton) {
+            completed.add(completeButton.dataset.complete);
+            localStorage.setItem("webwerkstatt-completed", JSON.stringify([...completed]));
+            updateProgress();
+            completeButton.textContent = "✓ Modul abgeschlossen";
+            completeButton.disabled = true;
+        }
+    });
+
+    updateProgress();
+    show("start");
+</script>
 </body>
 </html>
